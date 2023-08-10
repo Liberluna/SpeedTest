@@ -18,7 +18,7 @@ app.get('/*', async c => {
     file = await Deno.readFile(filepath)
   } catch {
     try {
-      file = await Deno.readFile(paty.join(filepath, 'index.html'))
+      file = await Deno.readFile(path.join(filepath, 'index.html'))
     } catch {
       return c.notFound()
     }   
