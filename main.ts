@@ -25,7 +25,10 @@ app.get('/*', async c => {
     }   
   }
   if (c.req.path.slice(-3) === ".ts") {
-    return c.text('ts')
+    c.header('content-type', 'text/javascript')
+    return c.text(await esbuild.transform(new TextDecoder().decode(file), {
+      loader: 'ts',
+    }))
   }
   return c.body(file)
 })
