@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/middleware.ts'
 import * as path from 'std/path/mod.ts'
+import * as esbuild from 'esbuild/wasm.js'
 
 const app = new Hono()
 
@@ -24,7 +25,7 @@ app.get('/*', async c => {
     }   
   }
   if (c.req.path.slice(-3) === ".ts") {
-    return "ts"
+    return c.text('ts')
   }
   return c.body(file)
 })
