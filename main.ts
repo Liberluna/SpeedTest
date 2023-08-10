@@ -17,9 +17,13 @@ app.get('/*', async c => {
   try {
     file = await Deno.readFile(filepath)
   } catch {
-    return c.notFound()
+    try {
+      file = await Deno.readFile(paty.join(filepath, 'index.html'))
+    } catch {
+      return c.notFound()
+    }   
   }
-  if (c.req.path.slice(-2) === ".ts") {
+  if (c.req.path.slice(-3) === ".ts") {
     return "ts"
   }
   return c.body(file)
