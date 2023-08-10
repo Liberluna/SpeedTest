@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/middleware.ts'
+import * as path from 'std/path/mod.ts'
 
 const app = new Hono()
 
@@ -10,7 +11,17 @@ app.get('/speed', c => {
   
   return c.text((new Blob([header], { type: "text/plain" })).size)
 })
-app.get('/*', serveStatic({
-  root: '/public'
-}))
+app.get('/*', async c => {
+  const filepath = path.join('public', c.req.path)
+  let file: Uint8Array = new Uint8Array()
+  try {
+    file = await Deno.readFile(filepath)
+  } catch {
+    return c.notFound()
+  }
+  if (c.req.path.slice(-2) === ".ts") {
+    return "ts"
+  }
+  return c.body(file)
+})
 Deno.serve(app.fetch)
